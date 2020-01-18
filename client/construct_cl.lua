@@ -9,9 +9,15 @@ local numb_of_objs = 0
 local shadows = {}
 
 function OnKeyPress(key)
-	if key == "Y" then
+    if (key == "Y" and GetPlayerVehicle()==0) then
         consactivated = not consactivated
         if (consactivated == false) then
+            CallRemoteEvent("RemoveShadow")
+        end
+    end
+    if key == "Escape" then
+        if consactivated then
+            consactivated = false
             CallRemoteEvent("RemoveShadow")
         end
     end
@@ -65,6 +71,7 @@ local lastconsactivated = nil
 
 function tickhook(DeltaSeconds)
     if consactivated then
+        if GetPlayerVehicle()==0 then
 		local ScreenX, ScreenY = GetScreenSize()
 		SetMouseLocation(ScreenX/2, ScreenY/2)
 		if remove_obj == false then
@@ -84,7 +91,11 @@ function tickhook(DeltaSeconds)
 				else
 					AddPlayerChat("Please look at valid locations")
 				end
-		    end
+            end
+        end
+    else
+        consactivated=false
+        CallRemoteEvent("RemoveShadow")
 		end
 	else
         lastconsactivated=false
