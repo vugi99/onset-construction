@@ -1,4 +1,5 @@
 
+
 local consactivated = false
 local curstruct = 1
 local currotyaw = 0
@@ -65,6 +66,19 @@ function OnKeyPress(key)
                 local ScreenX, ScreenY = GetScreenSize()
                 SetMouseLocation(ScreenX/2, ScreenY/2)
                 local entityType, entityId = GetMouseHitEntity()
+                local x,y,z = GetMouseHitLocation()
+            if entityType==2 then
+                local cx, cy, cz = GetCameraForwardVector()
+                local ltx = x+cx*65
+                local lty = y+cy*65
+                local ltz = z+cz*65
+                local eltx = x+cx*65+cx*10000
+                local elty = y+cy*65+cy*10000
+                local eltz = z+cz*65+cz*10000
+                local hittype, hitid, impactX, impactY, impactZ = LineTrace(ltx,lty,ltz,eltx,elty,eltz,4)
+                    entityType=hittype
+                    entityId=hitid
+            end
                 if (entityId~=0) then
                 	CallRemoteEvent("Removeobj",entityId)
                 end
@@ -91,7 +105,28 @@ function tickhook(DeltaSeconds)
 		SetMouseLocation(ScreenX/2, ScreenY/2)
 		if remove_obj == false then
 		lastconsactivated = true
-		local x,y,z = GetMouseHitLocation()
+        local x,y,z = GetMouseHitLocation()
+        local entityType, entityId = GetMouseHitEntity()
+        if entityType==2 then
+            local cx, cy, cz = GetCameraForwardVector()
+            local ltx = x+cx*65
+            local lty = y+cy*65
+            local ltz = z+cz*65
+            local eltx = x+cx*65+cx*10000
+            local elty = y+cy*65+cy*10000
+            local eltz = z+cz*65+cz*10000
+            local hittype, hitid, impactX, impactY, impactZ = LineTrace(ltx,lty,ltz,eltx,elty,eltz,4)
+                x=impactX
+                y=impactY
+                z=impactZ
+                entityType=hittype
+                entityId=hitid
+                if entityType==2 then
+                   x=0
+                   y=0
+                   z=0
+                end
+        end
 			if (x ~= lasthitposx or y ~= lasthitposy or z ~= lasthitposz or lastang ~= currotyaw or lastconsactivated ~= consactivated or lastcons ~= curstruct) then
 				lasthitposx = x
 				lasthitposy = y
@@ -100,7 +135,6 @@ function tickhook(DeltaSeconds)
 				lastcons = curstruct
 				lastconsactivated = true
                 if (x ~= 0 and y ~= 0 and z ~= 0) then
-					local entityType, entityId = GetMouseHitEntity()
                     local pitch,yaw,roll = GetCameraRotation()
                     if shadow==nil then
                     creatingshadow=true
@@ -350,7 +384,20 @@ function render_cons()
 	    DrawText(5, 475, "Use the mouse wheel to change your object")
 	    DrawText(5, 500, "Use the left click to place your object")
 	    if remove_obj then
-	        local entityType, entityId = GetMouseHitEntity()
+            local entityType, entityId = GetMouseHitEntity()
+            local x,y,z = GetMouseHitLocation()
+            if entityType==2 then
+                local cx, cy, cz = GetCameraForwardVector()
+                local ltx = x+cx*65
+                local lty = y+cy*65
+                local ltz = z+cz*65
+                local eltx = x+cx*65+cx*10000
+                local elty = y+cy*65+cy*10000
+                local eltz = z+cz*65+cz*10000
+                local hittype, hitid, impactX, impactY, impactZ = LineTrace(ltx,lty,ltz,eltx,elty,eltz,4)
+                    entityType=hittype
+                    entityId=hitid
+            end
             if (entityId ~= 0) then
                 local x, y, z = GetObjectLocation(entityId)
                 local bResult, ScreenX, ScreenY = WorldToScreen(x, y, z)
