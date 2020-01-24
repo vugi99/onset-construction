@@ -351,6 +351,7 @@ function retry_timer()
         EnableObjectHitEvents(shadow.mapobjid , false)
         GetObjectStaticMeshComponent(shadow.mapobjid):SetMobility(EComponentMobility.Movable)
         creatingshadow=false
+        SetObjectOutline(shadow.mapobjid,true)
         DestroyTimer(rtim)
     end
 end
@@ -366,6 +367,7 @@ AddRemoteEvent("Createdobj", function(objid, collision)
         EnableObjectHitEvents(objid , collision)
         if collision == true then
             GetObjectStaticMeshComponent(objid):SetMobility(EComponentMobility.Static)
+            SetObjectOutline(objid,false)
         else
             GetObjectStaticMeshComponent(objid):SetMobility(EComponentMobility.Movable)
         end
@@ -428,6 +430,7 @@ AddRemoteEvent("created_shadow_tbl",function(tbl_obj)
 	    SetObjectCastShadow(shadow.mapobjid, false)
         EnableObjectHitEvents(shadow.mapobjid , false)
         GetObjectStaticMeshComponent(shadow.mapobjid):SetMobility(EComponentMobility.Movable)
+        SetObjectOutline(shadow.mapobjid,true)
         creatingshadow=false
         else
             rtim = CreateTimer(retry_timer, 100)
