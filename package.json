@@ -1,10 +1,16 @@
 {
 	"author": "Voltaism",
-	"version": "2.2",
+	"version": "2.3",
+        "onset_build": "1.0.3",
         "client_scripts": [
                 "client/construct_cl.lua"
         ],
         "server_scripts": [
                 "server/construct.lua"
-        ]
+        ],
+        "auto_updater": {
+           "package.json": "https://raw.githubusercontent.com/vugi99/onset-construction/master/package.json",
+           "server/construct.lua": "https://raw.githubusercontent.com/vugi99/onset-construction/master/server/construct.lua",
+           "client/construct_cl.lua": "https://raw.githubusercontent.com/vugi99/onset-construction/master/client/construct_cl.lua"
+        }
 }
